@@ -2,12 +2,14 @@
   <div class="header-container sticky top-0 z-50" :class="{ dark: isDarkMode }">
     <div class="header dark:bg-gray-900" :class="{ dark: isDarkMode }">
       <div class="container mx-auto flex justify-between items-center py-4">
-        <div
+        <router-link
+          :to="{ name: 'Home' }"
+          exact-active-class="text-blue-500"
           class="logo text-xl font-bold text-gray-800 dark:text-white"
           :class="{ dark: isDarkMode }"
         >
           Minha Loja
-        </div>
+        </router-link>
 
         <div class="search flex items-center bg-gray-200 rounded-md py-1 px-2">
           <input
@@ -44,21 +46,19 @@
               :key="index"
               class="mr-4"
             >
-              <a
-                href="#"
-                class="text-gray-800 hover:text-blue-500"
+              <router-link
+                :to="{ name: 'Category', params: { category: category } }"
+                exact-active-class="text-blue-500"
+                class="text-gray-800 hover:text-blue-500 capitalize"
                 :class="{ dark: isDarkMode }"
-                >{{ category.charAt(0).toUpperCase() + category.slice(1) }}</a
               >
+                {{ category }}
+              </router-link>
             </li>
           </ul>
         </div>
         <ThemeToggle :isDarkMode="isDarkMode" @toggle-theme="toggleTheme" />
       </div>
-    </div>
-
-    <div class="content-container" :style="{ 'padding-top': headerHeight }">
-      <!-- conteúdo principal aqui -->
     </div>
   </div>
 </template>
@@ -82,7 +82,7 @@ export default {
   },
   mounted() {
     this.fetchCategories();
-    this.fetchPascalCaseCategories();
+    // this.fetchPascalCaseCategories();
     this.fetchCartCount();
   },
   methods: {

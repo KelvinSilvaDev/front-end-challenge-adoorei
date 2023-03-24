@@ -1,26 +1,30 @@
+<template>
+  <div id="app">
+    <Header
+      :theme="theme"
+      @toggle-theme="toggleTheme"
+      @search="handleSearch"
+      @reset-search="resetSearch"
+    />
+    <router-view :search-term="searchTerm" />
+  </div>
+</template>
+
 <script>
 import Header from "./components/Header.vue";
-// import ProductList from "./components/ProductList.vue";
-import Home from "./views/Home.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   components: {
     Header,
-    // ProductList,
-    Home,
   },
   data() {
     return {
-      cartCount: 0,
       searchTerm: "",
       theme: "light",
     };
   },
-
   methods: {
-    searchProducts() {
-      console.log(`Searching for "${this.searchTerm}"`);
-    },
     toggleTheme() {
       if (this.theme === "light") {
         this.theme = "dark";
@@ -30,12 +34,28 @@ export default {
         document.documentElement.classList.remove("dark");
       }
     },
+    handleSearch(term) {
+      this.searchTerm = term;
+    },
+    resetSearch() {
+      this.searchTerm = "";
+    },
+    created() {
+      const category = decodeURIComponent(
+        this.$router.push({
+          name: "Category",
+          params: {
+            categoryName: categoryName.toLowerCase().replace(/ /g, "-"),
+          },
+        })
+      );
+      if (category) {
+        this.$router.push({
+          name: "Category",
+          params: { category: encodeURIComponent(category) },
+        });
+      }
+    },
   },
-};
+});
 </script>
-
-<template>
-  <Header :theme="theme" @toggle-theme="toggleTheme" />
-  <!-- <ProductList :search-term="searchTerm" /> -->
-  <Home />
-</template>
