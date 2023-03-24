@@ -8,8 +8,19 @@ module.exports = {
   // darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      fontFamily: {
-        sans: ["Inter var", ...defaultTheme.fontFamily.sans],
+      colors: {
+        light: {
+          primary: "#ECEFF4",
+          secondary: "#D8DEE9",
+          accent: "#88C0D0",
+          text: "#2E3440",
+        },
+        dark: {
+          primary: "#2E3440",
+          secondary: "#3B4252",
+          accent: "#81A1C1",
+          text: "#ECEFF4",
+        },
       },
     },
   },

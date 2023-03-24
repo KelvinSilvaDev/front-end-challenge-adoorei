@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.theme-light {
+  --bg-primary: theme("colors.light.primary");
+  --bg-secondary: theme("colors.light.secondary");
+  --color-text: theme("colors.light.text");
+}
+
+.theme-dark {
+  --bg-primary: theme("colors.dark.primary");
+  --bg-secondary: theme("colors.dark.secondary");
+  --color-text: theme("colors.dark.text");
+}

@@ -2,6 +2,7 @@
   <div class="max-w-7xl mx-auto py-8 px-4 md:px-8">
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
+      :class="{ dark: isDarkMode }"
     >
       <div
         v-for="product in products"
@@ -36,19 +37,8 @@
             </div>
             <button
               class="bg-green-500 hover:bg-green-600 text-white text-sm py-2 px-4 rounded-full add-to-cart"
-              @click="addToCart(product)"
+              @click="addToCart(product.id)"
             >
-              <!-- <svg
-                class="h-6 w-6 inline mr-2"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M19 19H5V8H3V21H21V8H19V19ZM7 10H17V12H7V10ZM7 14H17V16H7V14Z"
-                  fill="currentColor"
-                />
-              </svg> -->
               Adicionar ao carrinho
             </button>
           </div>
@@ -60,7 +50,7 @@
 
 <script>
 import api from "../services/api";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 
 export default {
   data() {
@@ -68,14 +58,26 @@ export default {
       products: [],
     };
   },
-  mounted() {
-    this.fetchProducts();
+  computed: {
+    ...mapGetters("cart", ["cartItems", "cartTotal"]),
   },
   methods: {
-    ...mapActions(["addToCart"]),
+    async addToCart(productId) {
+      try {
+        const response = await api.get(`/products/${productId}`);
+        const product = response.data;
+        this.addToCart(product);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    ...mapActions("cart", ["addToCart"]),
+    ...mapMutations("cart", ["incrementItemQuantity"]),
+
+    // ...mapActions(["addToCart"]),
     async fetchProducts() {
       try {
-        const response = await api.get("/products");
+        const response = await api.get("/products?limit=99");
         this.products = response.data;
       } catch (error) {
         console.log(error);
@@ -84,6 +86,9 @@ export default {
     formatPrice(price) {
       return `R$ ${(price / 100).toFixed(2)}`;
     },
+  },
+  mounted() {
+    this.fetchProducts();
   },
 };
 </script>
@@ -171,15 +176,17 @@ export default {
 
 .product-button {
   z-index: 1;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-out;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
+.dark .product-card {
+  background-color: #1a202c;
+  color: #fff;
 }
 
-.product-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.line-through {
-  text-decoration: line-through;
+.dark .promo-label {
+  background-color: #48bb78;
 }
 </style>

@@ -1,46 +1,77 @@
 <template>
-  <div class="header bg-gray-100 shadow">
-    <div class="container mx-auto flex justify-between items-center py-2">
-      <div class="logo text-xl font-bold">Minha Loja</div>
-      <div class="search flex items-center bg-white rounded-md py-1 px-2">
-        <input
-          type="text"
-          v-model="searchTerm"
-          placeholder="Buscar produtos"
-          @keyup.enter="searchProducts"
-          class="w-full focus:outline-none"
-        />
-        <button
-          @click="searchProducts"
-          class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-4 rounded-md ml-2"
+  <div class="header-container sticky top-0 z-50" :class="{ dark: isDarkMode }">
+    <div class="header dark:bg-gray-900" :class="{ dark: isDarkMode }">
+      <div class="container mx-auto flex justify-between items-center py-4">
+        <div
+          class="logo text-xl font-bold text-gray-800 dark:text-white"
+          :class="{ dark: isDarkMode }"
         >
-          Buscar
-        </button>
+          Minha Loja
+        </div>
+
+        <div class="search flex items-center bg-gray-200 rounded-md py-1 px-2">
+          <input
+            type="text"
+            v-model="searchTerm"
+            placeholder="Buscar produtos"
+            @keyup.enter="searchProducts"
+            class="w-full focus:outline-none"
+            :class="{ dark: isDarkMode }"
+          />
+          <button
+            @click="searchProducts"
+            class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-4 rounded-md ml-2"
+            :class="{ dark: isDarkMode }"
+          >
+            Buscar
+          </button>
+        </div>
+        <div class="cart relative ml-4">
+          <i
+            class="fas fa-shopping-cart text-xl text-white-800 hover:text-red-500 dark:text-gray-100"
+            :class="{ dark: isDarkMode }"
+          ></i>
+          <span
+            class="cart-count absolute top-0 right-0 bg-blue-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs"
+            :class="{ dark: isDarkMode }"
+            >{{ cartCount }}</span
+          >
+        </div>
+        <div class="menu">
+          <ul class="flex items-center">
+            <li
+              v-for="(category, index) in categories"
+              :key="index"
+              class="mr-4"
+            >
+              <a
+                href="#"
+                class="text-gray-800 hover:text-blue-500"
+                :class="{ dark: isDarkMode }"
+                >{{ category.charAt(0).toUpperCase() + category.slice(1) }}</a
+              >
+            </li>
+          </ul>
+        </div>
+        <ThemeToggle :isDarkMode="isDarkMode" @toggle-theme="toggleTheme" />
       </div>
-      <div class="cart relative ml-4">
-        <i class="fas fa-shopping-cart text-xl"></i>
-        <span
-          class="cart-count absolute top-0 right-0 bg-blue-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs"
-          >{{ cartCount }}</span
-        >
-      </div>
-      <div class="menu">
-        <ul class="flex items-center">
-          <li v-for="(category, index) in categories" :key="index" class="mr-4">
-            <a href="#" class="text-gray-800 hover:text-blue-500">{{
-              category.charAt(0).toUpperCase() + category.slice(1)
-            }}</a>
-          </li>
-        </ul>
-      </div>
+    </div>
+
+    <div class="content-container" :style="{ 'padding-top': headerHeight }">
+      <!-- conteúdo principal aqui -->
     </div>
   </div>
 </template>
 
 <script>
 import api from "../services/api";
+import ThemeToggle from "./ThemeToggle.vue";
 
 export default {
+  props: {
+    isDarkMode: Boolean,
+  },
+
   data() {
     return {
       categories: [],
@@ -93,7 +124,20 @@ export default {
         console.log(error);
       }
     },
+    toggleTheme() {
+      this.$emit("toggle-theme");
+      // adiciona ou remove a classe dark do elemento body para mudar o background
+      document.body.classList.toggle("dark");
+      // seleciona o header e muda a cor do texto para branco ou preto dependendo do tema escolhido
+      const header = document.querySelector(".header");
+      if (header) {
+        header.classList.toggle("header--dark");
+        const links = header.querySelectorAll("a");
+        links.forEach((link) => link.classList.toggle("header__link--dark"));
+      }
+    },
   },
+  components: { ThemeToggle },
 };
 </script>
 
@@ -106,9 +150,6 @@ export default {
 }
 
 /* Component Styles */
-.header {
-  height: 60px;
-}
 
 .logo {
   color: #333;
@@ -123,12 +164,14 @@ export default {
 }
 
 .header {
+  height: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
   background-color: #1a202c;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  color: black;
 }
 
 .logo {
@@ -245,5 +288,10 @@ export default {
 
 .search button:hover {
   background-color: #0069d9;
+}
+
+.dark {
+  background-color: #1f2937;
+  color: #f9fafb;
 }
 </style>
