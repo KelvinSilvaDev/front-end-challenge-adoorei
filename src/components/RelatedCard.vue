@@ -1,6 +1,6 @@
 <template>
   <template v-if="isDarkMode">
-    <div class="shadow-lg rounded-lg overflow-hidden bg-gray-900 text-white">
+    <div class="shadow-lg w-full overflow-hidden bg-gray-900 text-white">
       <router-link :to="{ name: 'Product', params: { productId: product.id } }">
         <img
           class="h-80 w-full object-cover cursor-pointer first-letter:object-cover hover:scale-110 ease-in duration-500"
@@ -82,29 +82,35 @@
 
 <script>
 import { mapGetters } from "vuex";
-
 export default {
   props: {
     product: {
       type: Object,
       required: true,
     },
+    // eslint-disable-next-line no-undef
+    // theme: light,
   },
   data() {
     return {
-      cardClasses: "",
+      isDark: this.theme === "dark",
     };
   },
   computed: {
+    // cardClasses() {
+    //   return {
+    //     "bg-gray-900 text-white": this.isDark,
+    //     "bg-gray-100 text-gray-800": !this.isDark,
+    //     "shadow-lg": !this.isDark,
+    //     "shadow-md": this.isDark,
+    //     "rounded-lg": true,
+    //     "overflow-hidden": true,
+    //   };
+    // },
     ...mapGetters("cart", ["cartItems", "cartTotal"]),
     getTheme: mapGetters("theme", ["currentTheme"]),
     isDarkMode() {
       return this.$store.getters["theme/currentTheme"] === "dark";
-    },
-  },
-  watch: {
-    currentTheme() {
-      this.getTheme();
     },
   },
   methods: {
@@ -112,12 +118,7 @@ export default {
     // implement your addToCart logic here
     // },
     formatPrice(price) {
-      const formatedPrice = new Intl.NumberFormat("pt-br", {
-        style: "currency",
-        currency: "BRL",
-      });
-
-      return formatedPrice.format(price);
+      return `R$${price.toFixed(2)}`;
     },
     navigateToProduct(productId) {
       this.$router.push(`/product/${productId}`);
@@ -129,78 +130,24 @@ export default {
         this.cardClasses = "bg-white text-black";
       }
     },
+    // toggleTheme() {
+    //   this.currentTheme = this.currentTheme === "dark" ? "light" : "dark";
+    // },
   },
-  setup() {
-    return {
-      increment() {
-        this.$store.commit("increment");
-        console.log(this.$store.state.count);
-      },
-    };
+  watch: {
+    // theme(newTheme) {
+    //   this.isDark = newTheme === "dark";
+    // },
+    currentTheme() {
+      this.getTheme();
+    },
   },
 };
 </script>
 
 <style scoped>
-.product-card {
-  display: flex;
-  flex-direction: column;
-  background-color: #ffffff;
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.product-image {
-  width: 100%;
-  height: 0;
-  padding-bottom: 75%;
-  position: relative;
-}
-
-.product-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.product-details {
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-}
-
-.product-title {
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
-}
-
-.product-category {
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.product-price {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-
-.add-to-cart {
-  background-color: #000000;
-  color: #ffffff;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-.add-to-cart:hover {
-  background-color: #ffffff;
-  color: #000000;
-  border: 1px solid #000000;
+.cardClasses:hover .cursor-pointer {
+  transform: scale(1.1);
+  transition: all ease-in-out 0.5s;
 }
 </style>

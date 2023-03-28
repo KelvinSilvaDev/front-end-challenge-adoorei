@@ -1,7 +1,9 @@
 <template>
   <div class="header-container sticky top-0 z-50" :class="{ dark: isDarkMode }">
     <div class="header dark:bg-gray-900" :class="{ dark: isDarkMode }">
-      <div class="container mx-auto flex justify-between items-center py-4">
+      <div
+        class="container mx-auto flex justify-between items-center py-4 mr-4"
+      >
         <router-link
           :to="{ name: 'Home' }"
           exact-active-class="text-blue-500"
@@ -120,11 +122,14 @@
           </ul>
         </div>
       </div>
+      <ThemeToggle />
     </div>
   </div>
 </template>
 
 <script>
+// import { mapGetters } from "vuex";
+import { RouterLink } from "vue-router";
 import api from "../services/api";
 import ThemeToggle from "./ThemeToggle.vue";
 
@@ -145,8 +150,16 @@ export default {
   },
   created() {
     window.addEventListener("resize", this.handleResize);
+    // this.testCart();
   },
-  destroyed() {
+  // computed: {
+  //   ...mapGetters("cartModule", ["cartItems"]),
+  //   cartQuantity() {
+  //     return this.cartItems.length;
+  //   },
+  // },
+
+  unmounted() {
     window.removeEventListener("resize", this.handleResize);
   },
 
@@ -157,7 +170,7 @@ export default {
   },
   methods: {
     handleResize() {
-      this.isMobile = window.innerWidth <= 768; // update value based on screen width
+      this.isMobile = window.innerWidth <= 768;
     },
 
     async fetchCategories() {
@@ -181,6 +194,10 @@ export default {
         console.log(error);
       }
     },
+    // testCart() {
+    //   const cart = this.cartItems;
+    //   console.log("CARRINHO:", cart);
+    // },
     async fetchCartCount() {
       try {
         const response = await api.get("/carts/count");
@@ -200,9 +217,9 @@ export default {
     },
     toggleTheme() {
       this.$emit("toggle-theme");
-      // adiciona ou remove a classe dark do elemento body para mudar o background
+
       document.body.classList.toggle("dark");
-      // seleciona o header e muda a cor do texto para branco ou preto dependendo do tema escolhido
+
       const header = document.querySelector(".header");
       if (header) {
         header.classList.toggle("header--dark");
@@ -211,7 +228,7 @@ export default {
       }
     },
   },
-  components: { ThemeToggle },
+  components: { ThemeToggle, RouterLink },
 };
 </script>
 

@@ -1,103 +1,56 @@
 <template>
-  <button
-    class="p-2 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
-    @click="toggleTheme"
-  >
-    <svg
-      v-if="isLightTheme"
-      class="w-6 h-6 text-gray-800"
-      fill="none"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-      <path d="M16.5 14.5L12 10M12 10L7.5 14.5M12 10V21" />
-    </svg>
-    <svg
-      v-else
-      class="w-6 h-6 text-gray-200"
-      fill="none"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-      <path d="M16.5 14.5L12 10M12 10L7.5 14.5M12 10V21" />
-    </svg>
-  </button>
-  <!-- <button
-    @click="toggleTheme"
-    class="text-base font-medium text-gray-500 hover:text-gray-900 focus:outline-none"
-  >
-    {{ theme === "dark" ? "Light" : "Dark" }}
-  </button> -->
+  <label class="relative inline-flex items-center cursor-pointer">
+    <input
+      type="checkbox"
+      value=""
+      :checked="isDarkMode"
+      class="sr-only peer"
+      @click="toggleTheme"
+    />
+    <div
+      class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+    ></div>
+  </label>
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
-      isLightTheme: true, // inicialmente o tema é claro
+      isDarkMode: false,
     };
   },
+  computed: {
+    ...mapGetters("theme", ["currentTheme"]),
+  },
+  created() {
+    this.getTheme();
+  },
+
   methods: {
+    ...mapActions("theme", ["setTheme"]),
+
     toggleTheme() {
-      if (this.theme === "light") {
-        this.theme = "dark";
-        this.isDarkMode = !this.isDarkMode;
-        document.documentElement.classList.add("dark");
-      } else {
-        this.theme = "light";
-        this.isDarkMode = !this.isDarkMode;
-        document.documentElement.classList.remove("dark");
+      const isLightTheme = this.currentTheme !== "dark";
+      const theme = isLightTheme ? "dark" : "light";
+      this.$store.commit("theme/setTheme", theme);
+      this.isDarkMode = !this.isDarkMode;
+    },
+    getTheme() {
+      if (this.currentTheme !== undefined) {
+        this.isDarkMode = this.currentTheme === "dark";
       }
     },
-    // toggleTheme() {
-    //   this.isLightTheme = !this.isLightTheme;
-
-    //   // Verifica se o elemento HTML existe antes de alterar o tema
-    //   if (document && document.documentElement) {
-    //     // Verifica se a classe "dark" já está presente no elemento HTML
-    //     if (this.isLightTheme) {
-    //       document.documentElement.classList.remove("dark");
-    //       // Verifica se o armazenamento local existe antes de atualizar
-    //       if (localStorage) {
-    //         localStorage.removeItem("theme");
-    //       }
-    //     } else {
-    //       document.documentElement.classList.add("dark");
-    //       // Verifica se o armazenamento local existe antes de atualizar
-    //       if (localStorage) {
-    //         localStorage.setItem("theme", "dark");
-    //       }
-    //     }
-    //   }
-    // },
   },
 };
-
-// export default {
-//   data() {
-//     return {
-//       theme: "light",
-//     };
-//   },
-//   methods: {
-//     toggleTheme() {
-//       this.theme = this.theme === "dark" ? "light" : "dark";
-//       document.documentElement.setAttribute("data-theme", this.theme);
-//       localStorage.setItem("theme", this.theme);
-//     },
-//   },
-//   mounted() {
-//     const savedTheme = localStorage.getItem("theme");
-//     if (savedTheme) {
-//       this.theme = savedTheme;
-//     }
-//     document.documentElement.setAttribute("data-theme", this.theme);
-//   },
-// };
 </script>
+
+<style scoped>
+.peer-checked:after {
+  transform: translateX(100%);
+}
+.dark .peer-checked:after {
+  transform: translateX(0);
+}
+</style>

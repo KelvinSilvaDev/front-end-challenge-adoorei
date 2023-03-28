@@ -1,6 +1,11 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import router from "./router";
+import router from "./routes";
+import store from "./store";
+
+import "./tailwind.css";
 import "./index.css";
 
-createApp(App).use(router).mount("#app");
+store.dispatch("theme/initializeTheme"); // chamada do método initializeTheme
+
+createApp(App).use(router).use(store).mount("#app");

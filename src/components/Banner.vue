@@ -1,10 +1,28 @@
 <template>
   <div class="relative">
-    <img
+    <template v-if="isDarkMode">
+      <img
+        :src="bannerImageUrl"
+        alt="banner image"
+        class="w-full h-auto object-cover saturate-200"
+        :class="wrapperClasses"
+      />
+    </template>
+    <template v-else>
+      <img
+        :src="bannerImageUrl"
+        alt="banner image"
+        class="w-full h-auto object-cover saturate-200"
+        :class="wrapperClasses"
+      />
+    </template>
+
+    <!-- <img
       :src="bannerImageUrl"
       alt="banner image"
-      class="w-full h-auto object-cover"
-    />
+      class="w-full h-auto object-cover saturate-200"
+      :class="wrapperClasses"
+    /> -->
     <div class="absolute inset-0 bg-black opacity-50"></div>
     <div
       class="absolute inset-0 flex flex-col items-center justify-center px-4 md:px-8 text-center text-white"
@@ -16,6 +34,7 @@
           class="bg-white text-black font-bold py-3 px-6 rounded-full transition-all duration-300 hover:bg-black hover:text-white shadow-lg"
         >
           <span>Comprar</span>
+
           <i class="fas fa-shopping-cart ml-2"></i>
         </button>
       </a>
@@ -24,6 +43,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   props: {
     title: {
@@ -42,6 +63,35 @@ export default {
       type: String,
       required: true,
     },
+  },
+  data() {
+    return {
+      wrapperClasses: "bg-white text-black brightness-100",
+      // isDarkMode: boolean,
+    };
+  },
+  computed: {
+    ...mapGetters("theme", ["currentTheme"]),
+  },
+  methods: {
+    getTheme() {
+      if (this.currentTheme === "dark") {
+        this.wrapperClasses = "bg-black text-white brightness-50";
+        this.isDarkMode = true;
+      } else if (this.currentTheme === "light") {
+        this.isDarkMode = false;
+        this.wrapperClasses = "bg-white text-black brightness-100";
+      }
+    },
+  },
+  watch: {
+    currentTheme() {
+      this.getTheme();
+    },
+  },
+
+  mounted() {
+    this.getTheme();
   },
 };
 </script>

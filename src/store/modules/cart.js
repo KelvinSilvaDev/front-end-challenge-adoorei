@@ -1,7 +1,7 @@
 export default {
   namespaced: true,
   state: {
-    items: [],
+    items: [{ id: 1, name: "teste" }],
   },
   mutations: {
     addToCart(state, product) {

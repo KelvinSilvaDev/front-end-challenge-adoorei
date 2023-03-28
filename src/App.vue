@@ -1,38 +1,38 @@
 <template>
-  <div id="app">
-    <Header
-      :theme="theme"
-      @toggle-theme="toggleTheme"
-      @search="handleSearch"
-      @reset-search="resetSearch"
-    />
-    <router-view :search-term="searchTerm" />
-  </div>
+  <Header :theme="theme" @toggle-theme="toggleTheme" />
+  <RouterView :theme="theme" />
 </template>
 
 <script>
-import Header from "./components/Header.vue";
-import { defineComponent } from "vue";
+import { RouterView } from "vue-router";
+import { mapGetters } from "vuex";
 
-export default defineComponent({
+import Header from "./components/Header.vue";
+// import { defineComponent } from "vue";
+
+export default {
   components: {
     Header,
+    RouterView,
+  },
+  computed: {
+    ...mapGetters("theme", ["currentTheme"]),
   },
   data() {
     return {
       searchTerm: "",
-      theme: "light",
+      isDarkMode: false,
     };
   },
+  watch: {
+    currentTheme() {
+      this.getTheme();
+    },
+  },
   methods: {
+    ...mapGetters("theme", ["currentTheme"]),
     toggleTheme() {
-      if (this.theme === "light") {
-        this.theme = "dark";
-        document.documentElement.classList.add("dark");
-      } else {
-        this.theme = "light";
-        document.documentElement.classList.remove("dark");
-      }
+      this.isDarkMode = !this.isDarkMode;
     },
     handleSearch(term) {
       this.searchTerm = term;
@@ -40,22 +40,45 @@ export default defineComponent({
     resetSearch() {
       this.searchTerm = "";
     },
-    created() {
-      const category = decodeURIComponent(
-        this.$router.push({
-          name: "Category",
-          params: {
-            categoryName: categoryName.toLowerCase().replace(/ /g, "-"),
-          },
-        })
-      );
-      if (category) {
-        this.$router.push({
-          name: "Category",
-          params: { category: encodeURIComponent(category) },
-        });
+    getTheme() {
+      if (this.currentTheme !== undefined) {
+        console.log("TEMA ATUAL: ", this.currentTheme);
       }
     },
+    applyTheme() {
+      this.theme = localStorage.getItem("theme") || "light";
+    },
   },
-});
+  created() {
+    const category = decodeURIComponent(
+      this.$route.query.categoryName || this.$route.params.categoryName || ""
+    );
+    if (category) {
+      this.$router.push({
+        name: "Category",
+        params: { categoryName: encodeURIComponent(category) },
+      });
+    }
+  },
+  mounted() {
+    if (localStorage.getItem("theme")) {
+      this.theme = localStorage.getItem("theme");
+    }
+    window.addEventListener("storage", this.applyTheme);
+  },
+  beforeUnmount() {
+    window.removeEventListener("storage", this.applyTheme);
+  },
+};
 </script>
+
+<style>
+.app {
+  transition: background-color 0.5s ease-in-out;
+}
+
+.dark {
+  background-color: #1e1e1e;
+  color: #fff;
+}
+</style>
