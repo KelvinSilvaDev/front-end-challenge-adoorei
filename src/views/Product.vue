@@ -56,6 +56,9 @@
           </div>
         </div>
       </div>
+      <h3 class="text-2xl text-bold mb-2" :class="productClassesText">
+        Produtos relacionados
+      </h3>
       <RelatedProducts
         v-if="product.category"
         :category="product.category"
@@ -91,6 +94,7 @@ export default {
   mounted() {
     this.fetchProduct();
     this.getCurrentTheme();
+    this.updatePageTitle(this.productName);
   },
   created() {
     this.getCurrentTheme();
@@ -118,10 +122,16 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.product = response.data;
+          this.productName = response.data.title;
+          this.updatePageTitle(this.productName);
         })
         .catch((error) => {
           console.log(error);
         });
+    },
+    updatePageTitle() {
+      const title = this.productName;
+      document.title = title;
     },
     addToCart() {
       // Implement your add to cart logic here
@@ -133,11 +143,16 @@ export default {
     console.log(route?.params);
   },
   watch: {
+    currentProduct() {
+      console.log(this.productName);
+    },
     currentTheme() {
       this.getCurrentTheme();
     },
     "$route.params.productId"(newProductId) {
       this.fetchProduct(newProductId);
+      console.log(this.productName);
+      this.updatePageTitle();
     },
   },
   beforeUnmount() {

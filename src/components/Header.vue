@@ -19,12 +19,12 @@
         >
           <div class="relative flex items-center w-full">
             <input
-              type="text"
               v-model="searchTerm"
+              type="text"
               placeholder="Buscar produtos"
-              @keyup.enter="searchProducts"
-              class="w-full bg-transparent focus:outline-none text-gray-700 placeholder-gray-500"
               :class="{ dark: isDarkMode }"
+              class="w-full bg-transparent focus:outline-none text-gray-700 placeholder-gray-500"
+              @keyup.enter="searchProducts"
             />
 
             <span
@@ -33,9 +33,9 @@
           </div>
 
           <button
-            @click="searchProducts"
             class="bg-black text-white py-1 px-2 rounded-md ml-2 text-sm"
             :class="{ dark: isDarkMode }"
+            @click="searchProducts"
           >
             Buscar
           </button>
@@ -63,7 +63,7 @@
         <div class="flex align-middle gap-2">
           <div class="cart relative ml-4">
             <i
-              class="fas fa-shopping-cart text-xl text-white-800 hover:text-red-500 dark:text-gray-100"
+              class="fas fa-shopping-cart text-white text-xl md:text-white hover:text-red-500 dark:text-gray-100"
               :class="{ dark: isDarkMode }"
             ></i>
             <span
@@ -104,20 +104,45 @@
           class="mobile-menu md:hidden"
           :class="{ block: isMobileMenuOpen, hidden: !isMobileMenuOpen }"
         >
-          <ul class="flex-col gap-2 items-center">
-            <li
-              v-for="(category, index) in categories"
-              :key="index"
-              class="mr-2 mb-1 mt-1 w-[100%]"
-            >
+          <ul id="mobile-menu-items" class="flex-col gap-2 items-center">
+            <li v-for="(category, index) in categories" :key="index" class="">
               <router-link
                 :to="{ name: 'Category', params: { category: category } }"
                 exact-active-class="text-blue-500"
                 class="text-gray-800 hover:text-blue-500 capitalize flex w-[100%]"
                 :class="{ dark: isDarkMode }"
+                @click="isMobileMenuOpen = !isMobileMenuOpen"
               >
                 {{ category }}
               </router-link>
+            </li>
+            <li>
+              <div
+                class="search flex md:hidden items-center bg-gray-900 h-20 rounded-md py-1 px-2 flex-none"
+              >
+                <div class="relative flex items-center w-full">
+                  <input
+                    v-model="searchTerm"
+                    type="text"
+                    placeholder="Buscar produtos"
+                    :class="{ dark: isDarkMode }"
+                    class="w-full bg-transparent focus:outline-none text-gray-700 placeholder-gray-500"
+                    @keyup.enter="searchProducts"
+                  />
+
+                  <span
+                    class="absolute bottom-0 w-full border-b-2 border-gray-400"
+                  ></span>
+                </div>
+
+                <button
+                  class="bg-black text-white py-1 px-2 rounded-md ml-2 text-sm"
+                  :class="{ dark: isDarkMode }"
+                  @click="searchProducts"
+                >
+                  Buscar
+                </button>
+              </div>
             </li>
           </ul>
         </div>
@@ -263,6 +288,7 @@ export default {
   background-color: #1a202c;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   color: black;
+  max-width: 100%;
 }
 
 .logo {
@@ -326,6 +352,21 @@ export default {
   margin: 0;
 }
 
+#mobile-menu-items {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 2rem;
+  align-items: center;
+}
+
+#mobile-menu-items li {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .menu li {
   margin-right: 10px;
 }
@@ -387,14 +428,6 @@ export default {
 }
 
 /* Header */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background-color: #fff;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
 
 /* Logo */
 .logo {
@@ -435,8 +468,9 @@ export default {
   top: 100%;
   left: 0;
   width: 100%;
+  height: 100vh;
   padding: 1rem;
-  background-color: #fff;
+  background-color: rgb(17 24 39 / 69%);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   z-index: 999;
 }
@@ -446,9 +480,13 @@ export default {
 } */
 
 .mobile-menu a {
-  color: #333;
+  color: #fff;
   text-decoration: none;
-  font-size: 1.1rem;
+  font-size: 2rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
 }
 
 .mobile-menu a:hover {
@@ -464,9 +502,6 @@ export default {
 /* Media Queries */
 @media screen and (max-width: 768px) {
   /* Header */
-  .header {
-    padding: 1rem;
-  }
 
   /* Desktop Menu */
   .menu {
@@ -564,6 +599,17 @@ export default {
     .search button {
       font-size: 0.8rem;
     }
+  }
+}
+@media (prefers-color-scheme: light) {
+  .header {
+    background-color: rgb(17 24 39);
+  }
+  .header .logo,
+  .header .search input,
+  .header .menu a,
+  .header .cart i {
+    color: #fff;
   }
 }
 </style>

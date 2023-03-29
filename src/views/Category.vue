@@ -14,7 +14,7 @@
             class="w-full flex flex-col gap-4 items-start md:flex-row md:gap-8 md:items-end md:justify-end"
           >
             <div
-              class="w-full flex items-center justify-between space-x-4 md:justify-end"
+              class="w-full flex items-center justify-between space-x-4 md:justify-end md:w-3/4"
             >
               <label class="text-lg md:text-xl">Direção:</label>
               <select
@@ -27,7 +27,7 @@
               </select>
             </div>
             <div
-              class="w-full flex items-center justify-between space-x-4 md:justify-end md:mt-0"
+              class="w-full flex items-center justify-between space-x-4 md:justify-end md:w-3/12 md:mt-0"
             >
               <label class="text-lg md:text-xl">Ordenar por:</label>
               <select
@@ -62,7 +62,7 @@
           class="w-full flex flex-col gap-4 items-start md:flex-row md:gap-8 md:items-end md:justify-end"
         >
           <div
-            class="w-full flex items-center justify-between space-x-4 md:justify-end"
+            class="w-full flex items-center justify-between space-x-4 md:justify-end md:w-3/4"
           >
             <label class="text-lg md:text-xl">Direção:</label>
             <select
@@ -75,7 +75,7 @@
             </select>
           </div>
           <div
-            class="w-full flex items-center justify-between space-x-4 md:justify-end md:mt-0"
+            class="w-full flex items-center justify-between space-x-4 md:justify-end md:w-3/12 md:mt-0"
           >
             <label class="text-lg md:text-xl">Ordenar por:</label>
             <select
@@ -143,7 +143,7 @@ export default {
     updatePageTitle() {
       const categoryName = this.$route.params.category;
 
-      document.title = `Produtos na categoria ${categoryName}`;
+      document.title = `Produtos em ${categoryName}`;
     },
   },
   sortProducts(products) {

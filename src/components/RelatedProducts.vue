@@ -1,6 +1,5 @@
 <template>
   <div class="related-products">
-    <h3 class="text-lg font-medium mb-2">Produtos relacionados</h3>
     <swiper
       :slidesPerView="3"
       :spaceBetween="30"

@@ -42,6 +42,7 @@ export default {
     this.getTheme();
 
     this.getMyTheme();
+    document.title = "Home";
   },
   computed: {
     ...mapGetters("theme", ["currentTheme"]),
