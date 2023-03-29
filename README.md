@@ -1,4 +1,4 @@
-# Documentação do Projeto de Desenvolvimento Frontend - Adoorei
+# Projeto de Desenvolvimento Frontend - Adoorei
 
 ## Introdução
 
