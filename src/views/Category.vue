@@ -1,8 +1,10 @@
 <!-- eslint-disable vue/attribute-hyphenation -->
 <template>
   <template v-if="isDarkMode">
-    <div class="w-full bg-gray-800 h-full md:h-screen">
-      <div class="max-w-7xl mx-auto py-8 px-4 md:px-8">
+    <div class="w-full bg-gray-800 min-h-screen dark">
+      <div
+        class="max-w-7xl mx-auto py-8 px-4 md:px-8 light:max-w-7xl dark:max-w-full dark:text-white"
+      >
         <h1 class="text-3xl font-bold text-white">
           Produtos na categoria: <span class="capitalize">{{ category }}</span>
         </h1>
@@ -50,7 +52,7 @@
     </div>
   </template>
   <template v-else>
-    <div class="w-full max-w-7xl mx-auto py-8 px-4 md:px-8 h-screen">
+    <div class="w-full mx-auto py-8 px-4 md:px-8 h-screen">
       <h1 class="text-3xl font-bold">
         Produtos na categoria: <span class="capitalize">{{ category }}</span>
       </h1>
@@ -173,7 +175,9 @@ export default {
       return this.$route.params.category;
     },
     ...mapGetters("cart", ["cartItems", "cartTotal"]),
-    getTheme: mapGetters("theme", ["currentTheme"]),
+    getTheme() {
+      return this.currentTheme;
+    },
     isDarkMode() {
       return this.$store.getters["theme/currentTheme"] === "dark";
     },

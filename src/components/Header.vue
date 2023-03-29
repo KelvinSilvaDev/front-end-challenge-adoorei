@@ -15,7 +15,7 @@
 
         <!-- Search Input -->
         <div
-          class="search hidden md:flex items-center bg-transparent rounded-md py-1 px-2 flex-none"
+          class="search hidden md:w-1/6 md:flex items-center bg-transparent rounded-md py-1 px-2 flex-none"
         >
           <div class="relative flex items-center w-full">
             <input
@@ -24,7 +24,7 @@
               placeholder="Buscar produtos"
               :class="{ dark: isDarkMode }"
               class="w-full bg-transparent focus:outline-none text-gray-700 placeholder-gray-500"
-              @keyup.enter="searchProducts"
+              @input="delayedSearch"
             />
 
             <span
@@ -51,7 +51,7 @@
               <router-link
                 :to="{ name: 'Category', params: { category: category } }"
                 exact-active-class="text-blue-500"
-                class="text-red-400 hover:text-blue-500 capitalize"
+                class="text-red-400 hover:text-blue-500 capitalize text-xs md:text-md"
                 :class="{ dark: isDarkMode }"
               >
                 {{ category }}
@@ -59,8 +59,8 @@
             </li>
           </ul>
         </div>
-
-        <div class="flex align-middle gap-2">
+        <ThemeToggle class="block md:hidden" />
+        <div class="flex align-middle justify-end gap-2">
           <!-- <div class="cart relative ml-4">
             <i
               class="fas fa-shopping-cart text-white text-xl md:text-white hover:text-red-500 dark:text-gray-100"
@@ -73,6 +73,7 @@
             >
           </div> -->
           <CartComponent />
+
           <!-- Mobile Menu Icon -->
           <div
             class="mobile-menu-icon block md:hidden"
@@ -99,6 +100,7 @@
             </svg>
           </div>
         </div>
+        <!-- <ThemeToggle class="block md:hidden" /> -->
 
         <!-- Mobile Menu -->
         <div
@@ -147,15 +149,16 @@
             </li>
           </ul>
         </div>
-        <ThemeToggle />
+        <ThemeToggle class="hidden md:block" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
 import { RouterLink } from "vue-router";
+import { debounce } from "lodash";
+
 import api from "../services/api";
 import ThemeToggle from "./ThemeToggle.vue";
 import CartComponent from "./CartComponent.vue";
@@ -177,14 +180,7 @@ export default {
   },
   created() {
     window.addEventListener("resize", this.handleResize);
-    // this.testCart();
   },
-  // computed: {
-  //   ...mapGetters("cartModule", ["cartItems"]),
-  //   cartQuantity() {
-  //     return this.cartItems.length;
-  //   },
-  // },
 
   unmounted() {
     window.removeEventListener("resize", this.handleResize);
@@ -192,8 +188,6 @@ export default {
 
   mounted() {
     this.fetchCategories();
-    // this.fetchPascalCaseCategories();
-    this.fetchCartCount();
   },
   methods: {
     handleResize() {
@@ -221,27 +215,11 @@ export default {
         console.log(error);
       }
     },
-    // testCart() {
-    //   const cart = this.cartItems;
-    //   console.log("CARRINHO:", cart);
-    // },
-    async fetchCartCount() {
-      try {
-        const response = await api.get("/carts/count");
-        this.cartCount = response.data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
+
     async searchProducts() {
-      try {
-        const response = await api.get(`/products?title=${this.searchTerm}`);
-        this.searchedProducts = response.data;
-        this.searchTerm = "";
-      } catch (error) {
-        console.log(error);
-      }
+      this.$emit("search-term-changed", this.searchTerm);
     },
+
     toggleTheme() {
       this.$emit("toggle-theme");
 
@@ -255,6 +233,16 @@ export default {
       }
     },
   },
+  watch: {
+    searchTerm: {
+      immediate: true,
+      handler: async function () {
+        const delayedSearch = debounce(this.searchProducts, 1000);
+        delayedSearch();
+      },
+    },
+  },
+
   components: { ThemeToggle, RouterLink, CartComponent },
 };
 </script>
@@ -262,12 +250,9 @@ export default {
 <style>
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css");
 
-/* Global Styles */
 .container {
   max-width: 1200px;
 }
-
-/* Component Styles */
 
 .logo {
   color: #333;
@@ -388,15 +373,6 @@ export default {
   color: #333;
 }
 
-.search input {
-  /* height: 40px;
-  padding: 10px;
-  border: none;
-  border-radius: 20px;
-  background-color: #f5f5f5;
-  box-shadow: none; */
-}
-
 .search input:focus {
   outline: none;
 }
@@ -429,9 +405,6 @@ export default {
   color: #f9fafb;
 }
 
-/* Header */
-
-/* Logo */
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
@@ -439,7 +412,6 @@ export default {
   text-decoration: none;
 }
 
-/* Desktop Menu */
 .menu {
   display: flex;
   align-items: center;
@@ -453,18 +425,10 @@ export default {
   margin-right: 0;
 }
 
-/* .menu a {
-  color: #333;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 1.1rem;
-} */
-
 .menu a:hover {
   color: #666;
 }
 
-/* Mobile Menu */
 .mobile-menu {
   position: absolute;
   top: 100%;
@@ -476,10 +440,6 @@ export default {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   z-index: 999;
 }
-
-/* .mobile-menu li {
-  margin-bottom: 1rem;
-} */
 
 .mobile-menu a {
   color: #fff;
@@ -495,32 +455,24 @@ export default {
   color: #666;
 }
 
-/* Mobile Menu Icon */
 .mobile-menu-icon {
   cursor: pointer;
   display: none;
 }
 
-/* Media Queries */
 @media screen and (max-width: 768px) {
-  /* Header */
-
-  /* Desktop Menu */
   .menu {
     display: none;
   }
 
-  /* Mobile Menu Icon */
   .mobile-menu-icon {
     display: block;
   }
 
-  /* Mobile Menu */
   .mobile-menu {
     display: none;
   }
 
-  /* Mobile Menu Icon Animation */
   .mobile-menu-icon.open svg:nth-child(1) {
     transform: rotate(45deg);
     transform-origin: 50% 50%;

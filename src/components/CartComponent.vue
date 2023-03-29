@@ -5,11 +5,9 @@
         <div class="cart relative ml-4">
           <i
             class="fas fa-shopping-cart text-white text-xl md:text-white hover:text-red-500 dark:text-gray-100"
-            :class="{ dark: isDarkMode }"
           ></i>
           <span
             class="cart-count absolute top-0 right-0 bg-blue-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs"
-            :class="{ dark: isDarkMode }"
             >{{ currentCart.length }}</span
           >
         </div>
@@ -136,7 +134,6 @@ export default {
   data() {
     return {
       isCartOpen: false,
-      // totalPrice: 0,
     };
   },
   watch: {
@@ -158,15 +155,7 @@ export default {
 
       return formatter.format(price);
     },
-    totalPriceCalculator() {
-      // this.totalPrice =
-      //   this.cartItems && this.cartItems.length > 0
-      //     ? this.cartItems.reduce(
-      //         (total, item) => total + item.price * item.quantity,
-      //         0
-      //       )
-      //     : 0;
-    },
+    totalPriceCalculator() {},
 
     incrementQuantity(productId) {
       this.$store.commit("cartModule/increaseItemQuantity", productId);
@@ -175,26 +164,10 @@ export default {
       this.$store.commit("cartModule/decreaseItemQuantity", productId);
     },
 
-    // atualizarQuantidade(product, quantidade) {
-    //   if (quantidade <= 0) {
-    //     this.$store.commit(
-    //       "cartModule/removeFromCart",
-    //       this.currentCart[product]
-    //     );
-    //   } else {
-    //     this.$store.commit("cartModule/updateCart", {
-    //       id: this.currentCart[product.id],
-    //       quantity: quantidade,
-    //     });
-    //   }
-    // },
     removeFromCart(product) {
-      console.log(product);
       this.$store.dispatch("cartModule/removeFromCart", product);
     },
-    finalizarPedido() {
-      // Lógica para finalizar o pedido
-    },
+    finalizarPedido() {},
   },
   mounted() {
     this.totalPriceCalculator();

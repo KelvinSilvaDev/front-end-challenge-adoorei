@@ -46,24 +46,18 @@ const store = createStore({
       }
       localStorage.setItem("cart", JSON.stringify(state.currentCart));
     },
-
-    changeTheme(state) {
-      console.log("Change theme", state);
-    },
   },
   modules: {
     cartModule,
     theme,
   },
   getters: {
-    // Inclua aqui os getters que você deseja disponibilizar para seus componentes
     ...cartModule.getters,
     ...theme.getters,
   },
 });
 
 store.subscribe((mutation, state) => {
-  // Listen to mutations and update the cart module in local storage
   if (mutation.type.startsWith("cartModule/")) {
     localStorage.setItem("cart", JSON.stringify(state.cartModule.currentCart));
   }

@@ -100,7 +100,9 @@ export default {
     ...mapState({
       currentCart: (state) => state.currentCart,
     }),
-    getTheme: mapGetters("theme", ["currentTheme"]),
+    getTheme() {
+      return this.currentTheme;
+    },
     isDarkMode() {
       return this.$store.getters["theme/currentTheme"] === "dark";
     },
@@ -113,10 +115,7 @@ export default {
   methods: {
     ...mapActions("cartModule", ["addToCart"]),
     addToCart(product) {
-      console.log(product);
       this.$store.dispatch("cartModule/addToCart", product);
-
-      // this.$store.commit("addToCart", product);
     },
     formatPrice(price) {
       const formatedPrice = new Intl.NumberFormat("pt-br", {
@@ -141,7 +140,6 @@ export default {
     return {
       increment() {
         this.$store.commit("increment");
-        console.log(this.$store.state.count);
       },
     };
   },

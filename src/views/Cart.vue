@@ -1,8 +1,8 @@
 <template>
   <div class="relative">
     <button
-      @click="isCartOpen = !isCartOpen"
       class="bg-gray-800 text-white py-2 px-4 rounded"
+      @click="isCartOpen = !isCartOpen"
     >
       Carrinho
     </button>
@@ -31,8 +31,8 @@
               </div>
             </div>
             <button
-              @click="removeFromCart(index)"
               class="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600"
+              @click="removeFromCart(index)"
             >
               <span class="sr-only">Remove</span>
               <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -53,8 +53,8 @@
         </li>
         <li class="px-4 py-3">
           <button
-            @click="checkout"
             class="w-full bg-gray-800 text-white py-2 px-4 rounded"
+            @click="checkout"
           >
             Finalizar Pedido
           </button>
@@ -90,9 +90,7 @@ export default {
         0
       );
     },
-    finalizarPedido() {
-      // Lógica para finalizar o pedido
-    },
+    checkout() {},
   },
   computed: {
     carrinhoVazio() {

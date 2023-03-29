@@ -29,7 +29,7 @@
           <div class="mt-4">
             <button
               class="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700"
-              @click="addToCart(product.id)"
+              @click="addToCart(product)"
             >
               Add to cart
             </button>
@@ -69,7 +69,7 @@
           <div class="mt-4">
             <button
               class="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700"
-              @click="addToCart(product.id)"
+              @click="addToCart(product)"
             >
               Add to cart
             </button>
@@ -81,15 +81,13 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   props: {
     product: {
       type: Object,
       required: true,
     },
-    // eslint-disable-next-line no-undef
-    // theme: light,
   },
   data() {
     return {
@@ -97,26 +95,19 @@ export default {
     };
   },
   computed: {
-    // cardClasses() {
-    //   return {
-    //     "bg-gray-900 text-white": this.isDark,
-    //     "bg-gray-100 text-gray-800": !this.isDark,
-    //     "shadow-lg": !this.isDark,
-    //     "shadow-md": this.isDark,
-    //     "rounded-lg": true,
-    //     "overflow-hidden": true,
-    //   };
-    // },
     ...mapGetters("cart", ["cartItems", "cartTotal"]),
-    getTheme: mapGetters("theme", ["currentTheme"]),
+    getTheme() {
+      return this.currentTheme;
+    },
     isDarkMode() {
       return this.$store.getters["theme/currentTheme"] === "dark";
     },
   },
   methods: {
-    // addToCart(productId) {
-    // implement your addToCart logic here
-    // },
+    ...mapActions("cartModule", ["addToCart"]),
+    addToCart(product) {
+      this.$store.dispatch("cartModule/addToCart", product);
+    },
     formatPrice(price) {
       return `R$${price.toFixed(2)}`;
     },
@@ -130,14 +121,8 @@ export default {
         this.cardClasses = "bg-white text-black";
       }
     },
-    // toggleTheme() {
-    //   this.currentTheme = this.currentTheme === "dark" ? "light" : "dark";
-    // },
   },
   watch: {
-    // theme(newTheme) {
-    //   this.isDark = newTheme === "dark";
-    // },
     currentTheme() {
       this.getTheme();
     },

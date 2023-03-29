@@ -1,28 +1,38 @@
 <template>
-  <div class="relative">
+  <div class="relative h-screen md:h-auto">
     <template v-if="isDarkMode">
+      <img
+        :src="mobileBannerImageUrl"
+        alt="banner image"
+        class="w-full h-screen object-cover saturate-100 md:hidden"
+        :class="wrapperClasses"
+      />
+
+      <!-- Nova imagem, exibida somente em telas médias e maiores -->
       <img
         :src="bannerImageUrl"
         alt="banner image"
-        class="w-full h-auto object-cover saturate-200"
+        class="w-full h-auto object-cover saturate-200 hidden md:block"
         :class="wrapperClasses"
       />
     </template>
     <template v-else>
       <img
+        :src="mobileBannerImageUrl"
+        alt="banner image"
+        class="w-full h-screen object-cover saturate-200 md:hidden"
+        :class="wrapperClasses"
+      />
+
+      <!-- Nova imagem, exibida somente em telas médias e maiores -->
+      <img
         :src="bannerImageUrl"
         alt="banner image"
-        class="w-full h-auto object-cover saturate-200"
+        class="w-full h-auto object-cover saturate-200 hidden md:block"
         :class="wrapperClasses"
       />
     </template>
 
-    <!-- <img
-      :src="bannerImageUrl"
-      alt="banner image"
-      class="w-full h-auto object-cover saturate-200"
-      :class="wrapperClasses"
-    /> -->
     <div class="absolute inset-0 bg-black opacity-50"></div>
     <div
       class="absolute inset-0 flex flex-col items-center justify-center px-4 md:px-8 text-center text-white"
@@ -63,11 +73,15 @@ export default {
       type: String,
       required: true,
     },
+    mobileBannerImageUrl: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
       wrapperClasses: "bg-white text-black brightness-100",
-      // isDarkMode: boolean,
+      isDarkMode: this.isDarkMode,
     };
   },
   computed: {
@@ -97,9 +111,6 @@ export default {
 </script>
 
 <style scoped>
-img {
-  height: 400px;
-}
 @media (min-width: 768px) {
   img {
     height: 600px;

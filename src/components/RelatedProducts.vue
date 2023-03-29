@@ -1,8 +1,8 @@
 <template>
   <div class="related-products">
     <swiper
-      :slidesPerView="3"
-      :spaceBetween="30"
+      :slides-per-view="3"
+      :space-between="30"
       :loop="true"
       :navigation="true"
       :modules="modules"
@@ -14,7 +14,6 @@
       </swiper-slide>
     </swiper>
   </div>
-  <Test />
 </template>
 
 <script>
@@ -118,22 +117,6 @@ export default {
   background-position: center;
   background-repeat: no-repeat;
 }
-/* .swiper-button-custom {
-  color: #000;
-  font-size: 12px;
-  font-weight: bold;
-  background-color: #ccc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 4px;
-  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
-  padding: 8px;
-  user-select: none;
-} */
-
 .swiper {
   width: 100%;
   height: 100%;
@@ -144,7 +127,6 @@ export default {
   font-size: 18px;
   background: #fff;
 
-  /* Center slide text vertically */
   display: flex;
   justify-content: center;
   align-items: center;

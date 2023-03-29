@@ -49,7 +49,7 @@
           <div class="mb-4">
             <button
               class="bg-green-600 text-white font-bold text-lg py-2 px-4 rounded transition duration-300 ease-in-out hover:bg-yellow-500 hover:text-gray-900"
-              @click="addToCart"
+              @click="addToCart(product)"
             >
               Adicionar ao carrinho
             </button>
@@ -69,8 +69,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { useRoute } from "vue-router";
+import { mapActions, mapGetters } from "vuex";
 import RelatedProducts from "../components/RelatedProducts.vue";
 import api from "../services/api";
 
@@ -100,6 +99,10 @@ export default {
     this.getCurrentTheme();
   },
   methods: {
+    ...mapActions("cartModule", ["addToCart"]),
+    addToCart(product) {
+      this.$store.dispatch("cartModule/addToCart", product);
+    },
     getCurrentTheme() {
       this.theme = localStorage.getItem("theme") || "light";
       localStorage.setItem("theme", this.theme);
@@ -120,7 +123,6 @@ export default {
       api
         .get(`products/${productId || this.$route.params.productId}`)
         .then((response) => {
-          console.log(response.data);
           this.product = response.data;
           this.productName = response.data.title;
           this.updatePageTitle(this.productName);
@@ -133,25 +135,15 @@ export default {
       const title = this.productName;
       document.title = title;
     },
-    addToCart() {
-      // Implement your add to cart logic here
-    },
   },
-  setup() {
-    const route = useRoute();
 
-    console.log(route?.params);
-  },
   watch: {
-    currentProduct() {
-      console.log(this.productName);
-    },
     currentTheme() {
       this.getCurrentTheme();
     },
     "$route.params.productId"(newProductId) {
       this.fetchProduct(newProductId);
-      console.log(this.productName);
+
       this.updatePageTitle();
     },
   },

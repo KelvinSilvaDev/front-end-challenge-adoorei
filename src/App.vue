@@ -1,6 +1,6 @@
 <template>
-  <Header :theme="theme" @toggle-theme="toggleTheme" />
-  <RouterView :theme="theme" />
+  <Header />
+  <RouterView />
 </template>
 
 <script>
@@ -8,7 +8,6 @@ import { RouterView } from "vue-router";
 import { mapGetters } from "vuex";
 
 import Header from "./components/Header.vue";
-// import { defineComponent } from "vue";
 
 export default {
   components: {
@@ -30,7 +29,6 @@ export default {
     },
   },
   methods: {
-    ...mapGetters("theme", ["currentTheme"]),
     toggleTheme() {
       this.isDarkMode = !this.isDarkMode;
     },
@@ -41,9 +39,7 @@ export default {
       this.searchTerm = "";
     },
     getTheme() {
-      if (this.currentTheme !== undefined) {
-        console.log("TEMA ATUAL: ", this.currentTheme);
-      }
+      return this.currentTheme;
     },
     applyTheme() {
       this.theme = localStorage.getItem("theme") || "light";

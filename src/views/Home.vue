@@ -1,6 +1,7 @@
 <template>
   <Banner
     :banner-image-url="bannerImageUrl"
+    :mobile-banner-image-url="mobileBannerImageUrl"
     title="Descubra a melhor seleção de produtos para você"
     subtitle="Na nossa loja virtual, oferecemos uma ampla seleção de produtos de qualidade superior, que atendem às suas necessidades e preferências. Navegue pela nossa variedade de produtos, encontre o que você precisa e receba na comodidade da sua casa. Não perca mais tempo e adquira agora mesmo os produtos que vão facilitar o seu dia a dia e torná-lo mais prático e agradável."
     button-label="Comprar"
@@ -17,13 +18,8 @@ import { mapActions, mapMutations, mapGetters } from "vuex";
 import api from "../services/api";
 
 export default {
-  name: "Products",
-  props: {
-    theme: {
-      type: String,
-      default: "light",
-    },
-  },
+  name: "Home",
+
   components: {
     Banner,
     ProductList,
@@ -33,6 +29,8 @@ export default {
       products: [],
       bannerImageUrl:
         "https://images.unsplash.com/photo-1580828343064-fde4fc206bc6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80",
+      mobileBannerImageUrl:
+        "https://images.unsplash.com/photo-1605902711834-8b11c3e3ef2f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80",
       localTheme: this.theme,
     };
   },
@@ -61,13 +59,7 @@ export default {
         console.log(error);
       }
     },
-    // formatPrice(price) {
-    //   return `R$ ${(price / 100).toFixed(2)}`;
-    // },
-    addToCart(product) {
-      console.log(product);
-      // this.addToCartActio  n(product);
-    },
+
     ...mapActions([
       "cart",
       ["addToCart"],
@@ -77,9 +69,7 @@ export default {
 
     ...mapMutations("cart", ["incrementItemQuantity"]),
     getTheme() {
-      if (this.currentTheme !== undefined) {
-        console.log(this.theme);
-      }
+      return this.currentTheme;
     },
   },
   watch: {
@@ -89,9 +79,6 @@ export default {
     currentTheme() {
       this.getMyTheme();
     },
-    // theme: function (newValue) {
-    //   this.localTheme = newValue;
-    // },
   },
 };
 </script>

@@ -57,7 +57,9 @@ export default {
   },
   computed: {
     ...mapGetters("cart", ["cartItems", "cartTotal"]),
-    getTheme: mapGetters("theme", ["currentTheme"]),
+    getTheme() {
+      return this.currentTheme;
+    },
     isDarkMode() {
       return this.$store.getters["theme/currentTheme"] === "dark";
     },
