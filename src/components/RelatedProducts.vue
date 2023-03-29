@@ -8,7 +8,7 @@
       :navigation="true"
       :modules="modules"
       class="mySwiper"
-      :breakpoints="{ 600: { slidesPerView: 1 }, 900: { slidesPerView: 3 } }"
+      :breakpoints="{ 275: { slidesPerView: 1 }, 900: { slidesPerView: 3 } }"
     >
       <swiper-slide v-for="product in relatedProducts" :key="product.id">
         <RelatedCard :product="product" />

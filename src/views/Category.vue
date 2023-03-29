@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/attribute-hyphenation -->
 <template>
   <template v-if="isDarkMode">
     <div class="w-full bg-gray-800 h-full md:h-screen">
@@ -53,9 +54,13 @@
       <h1 class="text-3xl font-bold">
         Produtos na categoria: <span class="capitalize">{{ category }}</span>
       </h1>
-      <div class="my-4 flex flex-col md:flex-row items-center justify-between">
+      <div
+        class="my-4 flex flex-col items-start justify-between md:flex-row:items-center"
+      >
         <label class="text-lg md:text-xl mr-4">Opções de filtro</label>
-        <div class="flex gap-8">
+        <div
+          class="w-full flex flex-col gap-4 items-start md:flex-row md:gap-8 md:items-end md:justify-end"
+        >
           <div
             class="w-full flex items-center justify-between space-x-4 md:justify-end"
           >
@@ -63,19 +68,19 @@
             <select
               id="sort-direction"
               v-model="sortDirection"
-              class="w-32 md:w-auto p-2 rounded-md border border-gray-400"
+              class="w-32 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block p-2.5 dark:bg-white dark:border-gray-900 focus-within: dark:placeholder-black dark:text-black"
             >
               <option value="asc">Crescente</option>
               <option value="desc">Decrescente</option>
             </select>
           </div>
           <div
-            class="w-full flex items-center justify-between space-x-4 md:justify-end mt-4 md:mt-0"
+            class="w-full flex items-center justify-between space-x-4 md:justify-end md:mt-0"
           >
             <label class="text-lg md:text-xl">Ordenar por:</label>
             <select
               v-model="sortBy"
-              class="w-32 md:w-auto p-2 rounded-md border border-gray-400"
+              class="w-32 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block p-2.5 dark:bg-white dark:border-gray-900 focus-within: dark:placeholder-black dark:text-black"
             >
               <option value="name">Nome</option>
               <option value="price">Preço</option>

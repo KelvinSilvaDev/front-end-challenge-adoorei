@@ -6,7 +6,7 @@
           <img
             :src="product.image"
             :alt="product.title"
-            class="w-full h-fit md:w-3/4 object-fit rounded-lg shadow-lg"
+            class="w-full max-w-md max-h-full object-fit md:w-3/4 md:h-fit rounded-lg shadow-lg"
           />
         </div>
         <div class="flex flex-col justify-between">
