@@ -14,7 +14,7 @@ O projeto utiliza as seguintes tecnologias:
 - CSS
 - JavaScript
 - Vue.js
-- Tailwind CSS (opcional)
+- Tailwind CSS
 
 ## Avaliação do Teste
 
