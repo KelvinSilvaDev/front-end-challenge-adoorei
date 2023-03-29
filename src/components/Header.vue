@@ -2,7 +2,7 @@
   <div class="header-container sticky top-0 z-50" :class="{ dark: isDarkMode }">
     <div class="header dark:bg-gray-900" :class="{ dark: isDarkMode }">
       <div
-        class="container mx-auto flex justify-between items-center py-4 mr-4"
+        class="container mx-auto flex justify-between items-center py-4 mr-4 md:mx-auto"
       >
         <router-link
           :to="{ name: 'Home' }"
@@ -61,7 +61,7 @@
         </div>
 
         <div class="flex align-middle gap-2">
-          <div class="cart relative ml-4">
+          <!-- <div class="cart relative ml-4">
             <i
               class="fas fa-shopping-cart text-white text-xl md:text-white hover:text-red-500 dark:text-gray-100"
               :class="{ dark: isDarkMode }"
@@ -71,7 +71,8 @@
               :class="{ dark: isDarkMode }"
               >{{ cartCount }}</span
             >
-          </div>
+          </div> -->
+          <CartComponent />
           <!-- Mobile Menu Icon -->
           <div
             class="mobile-menu-icon block md:hidden"
@@ -146,8 +147,8 @@
             </li>
           </ul>
         </div>
+        <ThemeToggle />
       </div>
-      <ThemeToggle />
     </div>
   </div>
 </template>
@@ -157,6 +158,7 @@
 import { RouterLink } from "vue-router";
 import api from "../services/api";
 import ThemeToggle from "./ThemeToggle.vue";
+import CartComponent from "./CartComponent.vue";
 
 export default {
   props: {
@@ -253,7 +255,7 @@ export default {
       }
     },
   },
-  components: { ThemeToggle, RouterLink },
+  components: { ThemeToggle, RouterLink, CartComponent },
 };
 </script>
 

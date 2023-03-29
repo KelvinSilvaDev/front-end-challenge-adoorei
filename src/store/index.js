@@ -8,12 +8,45 @@ const store = createStore({
     increment(state) {
       state.count++;
     },
-    addToCart(state) {
-      console.log("Add to cart", state);
+    addToCart(state, product) {
+      const item = state.currentCart.find((item) => item.id === product.id);
+      if (item) {
+        item.quantity++;
+      } else {
+        state.currentCart.push({
+          id: product.id,
+          image: product.image,
+          name: product.name,
+          price: product.price,
+          quantity: 1,
+        });
+      }
+      localStorage.setItem("cart", JSON.stringify(state.currentCart));
     },
-    removeFromCart(state) {
-      console.log("Remove from cart", state);
+
+    removeFromCart(state, product) {
+      const index = state.currentCart.findIndex(
+        (item) => item.id === product.id
+      );
+      if (index !== -1) {
+        state.currentCart.splice(index, 1);
+      }
+      localStorage.setItem("cart", JSON.stringify(state.currentCart));
     },
+
+    clearCart(state) {
+      state.currentCart.splice(0, state.currentCart.length);
+      localStorage.setItem("cart", JSON.stringify(state.currentCart));
+    },
+
+    updateCart(state, product) {
+      const item = state.currentCart.find((item) => item.id === product.id);
+      if (item) {
+        item.quantity = product.quantity;
+      }
+      localStorage.setItem("cart", JSON.stringify(state.currentCart));
+    },
+
     changeTheme(state) {
       console.log("Change theme", state);
     },
@@ -27,6 +60,13 @@ const store = createStore({
     ...cartModule.getters,
     ...theme.getters,
   },
+});
+
+store.subscribe((mutation, state) => {
+  // Listen to mutations and update the cart module in local storage
+  if (mutation.type.startsWith("cartModule/")) {
+    localStorage.setItem("cart", JSON.stringify(state.cartModule.currentCart));
+  }
 });
 
 export default store;

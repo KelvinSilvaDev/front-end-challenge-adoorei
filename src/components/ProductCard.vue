@@ -29,7 +29,7 @@
           <div class="mt-4">
             <button
               class="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700"
-              @click="addToCart(product.id)"
+              @click="addToCart(product)"
             >
               Add to cart
             </button>
@@ -69,7 +69,7 @@
           <div class="mt-4">
             <button
               class="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700"
-              @click="addToCart(product.id)"
+              @click="addToCart(product)"
             >
               Add to cart
             </button>
@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
   props: {
@@ -97,6 +97,9 @@ export default {
   },
   computed: {
     ...mapGetters("cart", ["cartItems", "cartTotal"]),
+    ...mapState({
+      currentCart: (state) => state.currentCart,
+    }),
     getTheme: mapGetters("theme", ["currentTheme"]),
     isDarkMode() {
       return this.$store.getters["theme/currentTheme"] === "dark";
@@ -108,9 +111,13 @@ export default {
     },
   },
   methods: {
-    // addToCart(productId) {
-    // implement your addToCart logic here
-    // },
+    ...mapActions("cartModule", ["addToCart"]),
+    addToCart(product) {
+      console.log(product);
+      this.$store.dispatch("cartModule/addToCart", product);
+
+      // this.$store.commit("addToCart", product);
+    },
     formatPrice(price) {
       const formatedPrice = new Intl.NumberFormat("pt-br", {
         style: "currency",
